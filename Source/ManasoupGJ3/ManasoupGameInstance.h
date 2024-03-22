@@ -13,5 +13,9 @@ UCLASS()
 class MANASOUPGJ3_API UManasoupGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	float CurrentVolume = 0.7f;
 	
 };
