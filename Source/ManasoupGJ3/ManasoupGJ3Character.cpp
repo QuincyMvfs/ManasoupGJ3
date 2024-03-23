@@ -111,20 +111,20 @@ void AManasoupGJ3Character::Move(const FInputActionValue& Value)
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
 		// add movement 
-		AddMovementInput(ForwardDirection, MovementVector.Y);
+		//AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
 	}
 }
 
 void AManasoupGJ3Character::Look(const FInputActionValue& Value)
 {
-	// input is a Vector2D
-	FVector2D LookAxisVector = Value.Get<FVector2D>();
-
-	if (Controller != nullptr)
-	{
-		// add yaw and pitch input to controller
-		AddControllerYawInput(LookAxisVector.X);
-		AddControllerPitchInput(LookAxisVector.Y);
-	}
+	// // input is a Vector2D
+	// FVector2D LookAxisVector = Value.Get<FVector2D>();
+	//
+	// if (Controller != nullptr)
+	// {
+	// 	// add yaw and pitch input to controller
+	// 	AddControllerYawInput(LookAxisVector.X);
+	// 	AddControllerPitchInput(LookAxisVector.Y);
+	// }
 }
