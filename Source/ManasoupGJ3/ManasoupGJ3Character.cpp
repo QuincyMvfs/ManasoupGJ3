@@ -79,18 +79,38 @@ void AManasoupGJ3Character::SetupPlayerInputComponent(UInputComponent* PlayerInp
 		
 		// Jumping
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &AManasoupGJ3Character::Float);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &AManasoupGJ3Character::StopFloat);
 
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AManasoupGJ3Character::Move);
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AManasoupGJ3Character::Look);
+
+		// Dashing
+		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Started, this, &AManasoupGJ3Character::Dash);
 	}
 	else
 	{
 		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
+}
+
+void AManasoupGJ3Character::Float(const FInputActionValue& Value)
+{
+	FloatStartedEvent.Broadcast();
+}
+
+void AManasoupGJ3Character::StopFloat(const FInputActionValue& Value)
+{
+	FloatEndedEvent.Broadcast();
+}
+
+void AManasoupGJ3Character::Dash(const FInputActionValue& Value)
+{
+	OnDashedEvent.Broadcast();
 }
 
 void AManasoupGJ3Character::Move(const FInputActionValue& Value)
@@ -103,9 +123,6 @@ void AManasoupGJ3Character::Move(const FInputActionValue& Value)
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-		// get forward vector
-		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 	
 		// get right vector 
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
