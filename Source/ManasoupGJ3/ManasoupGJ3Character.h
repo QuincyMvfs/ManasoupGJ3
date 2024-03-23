@@ -18,6 +18,8 @@ DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FFloatStarted);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FFloatEnded);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDashed);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPaused);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnUnPaused);
 
 UCLASS(config=Game)
 class AManasoupGJ3Character : public ACharacter
@@ -51,6 +53,9 @@ class AManasoupGJ3Character : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* DashAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* PauseAction;
+
 public:
 	AManasoupGJ3Character();
 
@@ -62,6 +67,13 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FOnDashed OnDashedEvent;
+	
+	UPROPERTY(BlueprintAssignable)
+	FOnPaused OnPausedEvent;
+	
+	UPROPERTY(BlueprintAssignable)
+	FOnUnPaused OnUnPausedEvent;
+
 
 protected:
 
@@ -79,14 +91,21 @@ protected:
 	// To add mapping context
 	virtual void BeginPlay();
 
+	virtual void Jump() override;
 	virtual void Float(const FInputActionValue& Value);
 	virtual void StopFloat(const FInputActionValue& Value);
 	virtual void Dash(const FInputActionValue& Value);
+	
+	UFUNCTION(BlueprintCallable)
+	virtual void Pause(const FInputActionValue& Value);
 
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool M_IsPaused = false;
 };
 

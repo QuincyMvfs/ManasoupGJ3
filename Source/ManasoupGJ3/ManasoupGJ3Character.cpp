@@ -78,7 +78,7 @@ void AManasoupGJ3Character::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
 		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &AManasoupGJ3Character::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &AManasoupGJ3Character::Float);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &AManasoupGJ3Character::StopFloat);
@@ -91,6 +91,9 @@ void AManasoupGJ3Character::SetupPlayerInputComponent(UInputComponent* PlayerInp
 
 		// Dashing
 		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Started, this, &AManasoupGJ3Character::Dash);
+
+		// Pausing
+		EnhancedInputComponent->BindAction(PauseAction, ETriggerEvent::Started, this, &AManasoupGJ3Character::Pause);
 	}
 	else
 	{
@@ -98,23 +101,51 @@ void AManasoupGJ3Character::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	}
 }
 
+void AManasoupGJ3Character::Jump()
+{
+	if (M_IsPaused) return;
+	
+	Super::Jump();
+}
+
 void AManasoupGJ3Character::Float(const FInputActionValue& Value)
 {
+	if (M_IsPaused) return;
+
 	FloatStartedEvent.Broadcast();
 }
 
 void AManasoupGJ3Character::StopFloat(const FInputActionValue& Value)
 {
+	if (M_IsPaused) return;
+
 	FloatEndedEvent.Broadcast();
 }
 
 void AManasoupGJ3Character::Dash(const FInputActionValue& Value)
 {
+	if (M_IsPaused) return;
+
 	OnDashedEvent.Broadcast();
+}
+
+void AManasoupGJ3Character::Pause(const FInputActionValue& Value)
+{
+	M_IsPaused = !M_IsPaused;
+	if (M_IsPaused)
+	{
+		OnPausedEvent.Broadcast();
+	}
+	else
+	{
+		OnUnPausedEvent.Broadcast();
+	}
 }
 
 void AManasoupGJ3Character::Move(const FInputActionValue& Value)
 {
+	if (M_IsPaused) return;
+
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
