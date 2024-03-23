@@ -15,6 +15,10 @@ struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FFloatStarted);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FFloatEnded);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDashed);
+
 UCLASS(config=Game)
 class AManasoupGJ3Character : public ACharacter
 {
@@ -44,9 +48,20 @@ class AManasoupGJ3Character : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* DashAction;
+
 public:
 	AManasoupGJ3Character();
-	
+
+	UPROPERTY(BlueprintAssignable)
+	FFloatStarted FloatStartedEvent;
+
+	UPROPERTY(BlueprintAssignable)
+	FFloatEnded FloatEndedEvent;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnDashed OnDashedEvent;
 
 protected:
 
@@ -63,6 +78,10 @@ protected:
 	
 	// To add mapping context
 	virtual void BeginPlay();
+
+	virtual void Float(const FInputActionValue& Value);
+	virtual void StopFloat(const FInputActionValue& Value);
+	virtual void Dash(const FInputActionValue& Value);
 
 public:
 	/** Returns CameraBoom subobject **/
