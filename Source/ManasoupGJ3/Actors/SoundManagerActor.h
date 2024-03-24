@@ -51,6 +51,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Sounds|Movement")
 	TArray<USoundWave*> M_WallJump;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Sounds|Movement")
+	TArray<USoundWave*> M_Dash;
+
 	// DEATH
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Sounds|Death")
 	TArray<USoundWave*> M_AliveDead;
@@ -62,8 +65,8 @@ public:
 	TArray<USoundWave*> M_Resurrection;
 
 	// ETC
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Sounds|UI")
-	TArray<USoundWave*> M_ButtonSelected;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Sounds|LevelComponents")
+	TArray<USoundWave*> M_Collect;
 
 	// LEVEL COMPONENTS
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Sounds|LevelComponents")
